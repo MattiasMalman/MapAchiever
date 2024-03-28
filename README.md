@@ -11,6 +11,8 @@ MapAchiever is a World of Warcraft addon that will show your characters Dungeon 
 
 In [CurseForge app](https://download.curseforge.com/), go to `World of Warcraft` and search for `MapAchiever`. Hit the `Install` button.
 
+Or use [this link](https://www.curseforge.com/wow/addons/mapachiever) to access the addon on CurseForge.
+
 ## :hammer_and_wrench: Manual Installation
 Get [latest release](https://github.com/MattiasMalman/MapAchiever/releases) and move the folder `MapAchiever` from the zip file to this path:
 
