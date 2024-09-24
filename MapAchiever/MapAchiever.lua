@@ -39,29 +39,33 @@ local function switchIfNot()
         --SwitchAchievementSearchTab(3)
     end
 end
-local OnMapUpdate = function(self)
-    switchIfNot()
-    local name = self.Name:GetText() or ""
-    local desc = self.Description:GetText() or ""
-    local map = self.dataProvider:GetMap()
-    if last == name .. desc then return end
-    last = name .. desc
-    if map.pinPools.DungeonEntrancePinTemplate and map.pinPools.DungeonEntrancePinTemplate.activeObjects then
-        for pin in pairs(map.pinPools.DungeonEntrancePinTemplate.activeObjects) do
-            if pin.journalInstanceID and pin.name == name and pin.description == desc then
-                waitForSearch = {
-                    name = name,
-                    frame = self,
-                    pName = name,
-                    pDesc = desc,
-                    ej = pin.journalInstanceID
-                }
-                startSearch(exceptions[pin.journalInstanceID] or name)
-            end
+local function updateHover(_, pin)
+    RunNextFrame(function()
+        switchIfNot()
+        local name = areaText.Name:GetText() or ""
+        local desc = areaText.Description:GetText() or ""
+        if last == name .. desc then return end
+        last = name .. desc
+        if pin and pin.pinTemplate and pin.pinTemplate == "DungeonEntrancePinTemplate" then
+            --print(EJ_GetInstanceInfo(pin.journalInstanceID))
+            waitForSearch = {
+                name = pin.name,
+                frame = areaText,
+                pName = name,
+                pDesc = desc,
+                ej = pin.journalInstanceID
+            }
+            startSearch(exceptions[pin.journalInstanceID] or name)
         end
-    end
+    end)
 end
-areaText:HookScript("OnUpdate", OnMapUpdate)
+
+local function resetHover()
+    last = ""
+end
+
+EventRegistry:RegisterCallback("MapLegendPinOnEnter", updateHover)
+EventRegistry:RegisterCallback("MapLegendPinOnEnter", resetHover)
 
 local function OnEvent()
     if not waitForSearch then return end
